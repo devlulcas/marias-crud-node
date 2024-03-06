@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Define o modelo de dados para a coleção "Customer" no MongoDB.
+model Customer {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId // Define o campo de ID como uma String e configurações adicionais para o MongoDB
+  name       String // Define o campo "name" como uma String
+  category   String? // Define o campo "category" como uma String opcional
+  quantity   Int? // Define o campo "quantity" como um Inteiro opcional
+  status     Boolean // Define o campo "status" como um Booleano
+  created_at DateTime? @default(now()) // Define o campo "created_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
+  updated_at DateTime? @default(now()) // Define o campo "updated_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
+
+  @@map("customers") // Mapeia este modelo para a coleção "customers" no MongoDB
+}
