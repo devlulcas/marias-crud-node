@@ -7,6 +7,9 @@ import Fastify from "fastify";
 // Importa as definições de rotas da aplicação
 import { routes } from "./routes";
 
+// Define o baseURL do servidor
+const baseURL = "http://localhost:3333"; // Altere conforme necessário
+
 // Cria uma instância do aplicativo Fastify, habilitando o registro de logs
 const app = Fastify({ logger: true });
 
@@ -21,13 +24,15 @@ const start = async () => {
   await app.register(cors);
 
   // Registra as rotas da aplicação
-  await app.register(routes);
+  await app.register(routes, { prefix: "/api" }); // Prefixa todas as rotas com '/api'
 
   try {
     // Inicia o servidor na porta 3333
     await app.listen({ port: 3333 });
+    console.log(`Server running at ${baseURL}`);
   } catch (err) {
     // Em caso de erro ao iniciar o servidor, encerra o processo
+    console.error(err);
     process.exit(1);
   }
 };
