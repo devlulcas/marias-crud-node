@@ -15,7 +15,7 @@ class CreateCustomerService {
       throw new Error("Preencha todos os campos corretamente");
     }
 
-    // Cria o cliente no banco de dados usando o Prisma
+    // Cria o estoque no banco de dados usando o Prisma
     const customer = await prismaClient.customer.create({
       data: {
         name,
@@ -25,7 +25,7 @@ class CreateCustomerService {
       },
     });
 
-    // Retorna o cliente recém-criado
+    // Retorna o estoque recém-criado
     return customer;
   }
 }

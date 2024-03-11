@@ -19,13 +19,13 @@ class CreateCustomerController {
         return;
       }
 
-      // Define o status do cliente como inativo se a quantidade for 0 ou menor
+      // Define o status como inativo se a quantidade for 0 ou menor
       const status = quantity <= 0 ? false : true;
 
-      // Cria uma instância do serviço de criação de cliente
+      // Cria uma instância do serviço de criação
       const customerService = new CreateCustomerService();
 
-      // Executa o serviço para criar um novo cliente
+      // Executa o serviço para criar um novo stock
       const customer = await customerService.execute({
         name,
         category,
@@ -33,7 +33,7 @@ class CreateCustomerController {
         status, // Passa o status calculado para o serviço
       });
 
-      // Envia a resposta de volta ao cliente com os dados do cliente recém-criado
+      // Envia a resposta de volta com os dados do cadastro recém-criado
       reply.code(201).send({ message: "Cliente criado com sucesso", data: customer });
     } catch (error) {
       // Se ocorrer um erro durante o processamento da solicitação, retorna um erro interno do servidor

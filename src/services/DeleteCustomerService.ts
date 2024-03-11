@@ -1,32 +1,32 @@
 import prismaClient from "../prisma";
 
-// Interface que define a estrutura dos parâmetros necessários para excluir um cliente
+// Interface que define a estrutura dos parâmetros necessários para excluir um Estoque
 interface DeleteCustomerProps {
   id: string;
 }
 
-// Classe que encapsula a lógica para excluir um cliente
+// Classe que encapsula a lógica para excluir um Estoque
 class DeleteCustomerService {
-  // Método assíncrono que executa a exclusão do cliente com base nos parâmetros fornecidos
+  // Método assíncrono que executa a exclusão do Estoque com base nos parâmetros fornecidos
   async execute({ id }: DeleteCustomerProps) {
-    // Verifica se o ID do cliente é válido
+    // Verifica se o ID do Estoque é válido
     if (!id) {
       throw new Error("Solicitação inválida");
     }
 
-    // Procura o cliente com base no ID fornecido
+    // Procura o Estoque com base no ID fornecido
     const findCustomer = await prismaClient.customer.findFirst({
       where: {
         id: id,
       },
     });
 
-    // Se o cliente não for encontrado, lança um erro
+    // Se o Estoque não for encontrado, lança um erro
     if (!findCustomer) {
-      throw new Error("Cliente não encontrado");
+      throw new Error("Estoque não encontrado");
     }
 
-    // Exclui o cliente do banco de dados usando o Prisma
+    // Exclui o Estoque do banco de dados usando o Prisma
     await prismaClient.customer.delete({
       where: {
         id: findCustomer.id,
