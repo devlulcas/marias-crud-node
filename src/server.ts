@@ -10,6 +10,8 @@ import { routes } from "./routes";
 // Define o baseURL do servidor
 const baseURL = "http://localhost:3333"; // Altere conforme necessário
 
+const port = process.env.PORT || 3333;
+
 // Cria uma instância do aplicativo Fastify, habilitando o registro de logs
 const app = Fastify({ logger: true });
 
