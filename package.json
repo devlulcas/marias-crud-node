@@ -5,12 +5,12 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": ">=18"
   },
   "scripts": {
-    "start": "node dist/server.ts",
-    "dev": "tsx watch src/server.ts",
-    "build": "tsup src"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules --respawn src/server.ts"
   },
   "keywords": [],
   "author": "",
