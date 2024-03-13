@@ -13,8 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Define o modelo de dados para a coleção "Customer" no MongoDB.
-model Customer {
+// Define o modelo de dados para a coleção "Stock" no MongoDB.
+model Stock {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId // Define o campo de ID como uma String e configurações adicionais para o MongoDB
   name       String // Define o campo "name" como uma String
   category   String? // Define o campo "category" como uma String opcional
@@ -23,5 +23,13 @@ model Customer {
   created_at DateTime? @default(now()) // Define o campo "created_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
   updated_at DateTime? @default(now()) // Define o campo "updated_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
 
-  @@map("customers") // Mapeia este modelo para a coleção "customers" no MongoDB
+  @@map("stock") // Mapeia este modelo para a coleção "stock" no MongoDB
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  password String
+
+  @@map("user")
 }
