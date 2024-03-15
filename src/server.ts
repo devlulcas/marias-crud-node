@@ -3,12 +3,11 @@ import cors from "@fastify/cors";
 
 // Importa o módulo Fastify para criar o servidor web e registrar rotas
 import Fastify from "fastify";
-
 // Importa as definições de rotas da aplicação
 import { routes } from "./routes";
-
+import replyPlugin from "./plugins/passPlugin";
 // Define o baseURL do servidor
-const baseURL = "http://localhost:3333"; // Altere conforme necessário
+const baseURL = "http://localhost:3333";
 
 const port = process.env.PORT || 3333;
 
@@ -24,6 +23,8 @@ app.setErrorHandler((error, request, reply) => {
 const start = async () => {
   // Registra o middleware de CORS para lidar com as políticas de CORS
   await app.register(cors);
+
+  app.register(replyPlugin);
 
   // Registra as rotas da aplicação
   await app.register(routes, { prefix: "/api" }); // Prefixa todas as rotas com '/api'
