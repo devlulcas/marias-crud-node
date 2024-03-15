@@ -15,6 +15,7 @@ import { RegisterUserController } from "./controllers/RegisterUserController";
 import { logoutUser } from "./controllers/logoutController";
 import { getUsers } from "./controllers/UsersListController";
 import { deleteUserHandler } from "./controllers/DeleteUserController";
+import { authorize } from "./middleware/authorization";
 
 // Função responsável por definir as rotas da aplicação
 export async function routes(fastify: FastifyInstance) {
@@ -44,6 +45,26 @@ export async function routes(fastify: FastifyInstance) {
 
   // Rota para deletar um usuário
   fastify.delete("/users/:userId", deleteUserHandler);
+
+  // Rota para o administrador
+  fastify.get(
+    "/admin",
+    { preHandler: authorize("ADMIN") },
+    async (request, reply) => {
+      reply.send({
+        message: "Esta rota é acessível apenas para administradores",
+      });
+    }
+  );
+
+  // Rota para o usuário comum
+  fastify.get(
+    "/user",
+    { preHandler: authorize("USER") },
+    async (request, reply) => {
+      return { message: "Esta é uma rota privada do usuário" };
+    }
+  );
 
   // Rota para logout
   fastify.post(
