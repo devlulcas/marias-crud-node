@@ -12,5 +12,6 @@ export async function findUserByUsername(
     id: user.id,
     username: user.username,
     password: user.password,
+    role: user.role,
   };
 }

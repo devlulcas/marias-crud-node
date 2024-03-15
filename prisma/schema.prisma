@@ -19,6 +19,8 @@ model Stock {
   name       String // Define o campo "name" como uma String
   category   String? // Define o campo "category" como uma String opcional
   quantity   Int? // Define o campo "quantity" como um Inteiro opcional
+  barcode    String? // Define o campo "barcode" como um Inteiro opcional
+  description      String? // Define o campo "description" como um Inteiro opcional
   status     Boolean // Define o campo "status" como um Booleano
   created_at DateTime? @default(now()) // Define o campo "created_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
   updated_at DateTime? @default(now()) // Define o campo "updated_at" como uma Data e Hora opcional, com valor padrão definido como o momento atual
@@ -30,6 +32,12 @@ model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   password String
+  role     Role   @default(USER)
 
   @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
