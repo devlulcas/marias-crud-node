@@ -8,7 +8,6 @@ import {
 
 // Importações dos controladores para manipular as requisições
 import { DeleteStockController } from "./controllers/DeleteStockController";
-import { ListStockController } from "./controllers/ListStockController";
 import { CreateStockController } from "./controllers/CreateStockController";
 import { LoginUserController } from "./controllers/LoginUserController";
 import { RegisterUserController } from "./controllers/RegisterUserController";
@@ -16,6 +15,13 @@ import { logoutUser } from "./controllers/logoutController";
 import { getUsers } from "./controllers/UsersListController";
 import { deleteUserHandler } from "./controllers/DeleteUserController";
 import { authorize } from "./middleware/authorization";
+import {
+  getProductCountHandler,
+  getUserCountHandler,
+} from "./controllers/countHandlers";
+import { getProductCountByCategoryHandler } from "./controllers/getProductCountByCategoryHandler";
+import { CurrentStockReportController } from "./controllers/relatorios/CurrentStockReportController";
+import { ListStockController } from "./controllers/ListStockController";
 
 // Função responsável por definir as rotas da aplicação
 export async function routes(fastify: FastifyInstance) {
@@ -26,8 +32,15 @@ export async function routes(fastify: FastifyInstance) {
       return { ok: true }; // Retorna um objeto indicando que o servidor está online
     }
   );
-  // Rota de login
 
+  const currentStockReportController = new CurrentStockReportController();
+
+  fastify.get("/current-stock-report", async (request, reply) => {
+    // Chame o método `handle` do controlador e retorne sua resposta
+    return currentStockReportController.handle(request, reply);
+  });
+
+  // Rota de login
   fastify.post(
     "/login",
     async (request: FastifyRequest, reply: FastifyReply) => {
@@ -44,7 +57,7 @@ export async function routes(fastify: FastifyInstance) {
   fastify.get("/users", getUsers);
 
   // Rota para deletar um usuário
-  fastify.delete("/users/:userId", deleteUserHandler);
+  fastify.delete("/delete-users/:userId", deleteUserHandler);
 
   // Rota para o administrador
   fastify.get(
@@ -92,6 +105,11 @@ export async function routes(fastify: FastifyInstance) {
       return new ListStockController().handle(request, reply);
     }
   );
+
+  fastify.get("/products/count", getProductCountHandler);
+  fastify.get("/users/count", getUserCountHandler);
+
+  fastify.get("/products/count-by-category", getProductCountByCategoryHandler);
 
   // Rota para excluir um produto
   fastify.delete(
