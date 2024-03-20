@@ -1,40 +1,43 @@
-import prismaClient from "../prisma";
+import { PrismaClient } from "@prisma/client";
 
-interface ICreateStockProps {
+interface CreateStockDTO {
   name: string;
   category: string;
   quantity: number;
   barcode: string;
   description: string;
-  status: boolean; // Adiciona a propriedade status
+  status: boolean;
+  imageUrl: string;
 }
 
 class CreateStockService {
-  async execute({
-    name,
-    category,
-    quantity,
-    barcode,
-    description,
-    status,
-  }: ICreateStockProps) {
-    if (!name || !category || isNaN(quantity) || !barcode || !description) {
-      throw new Error("Preencha todos os campos corretamente");
+  private prisma: PrismaClient;
+
+  constructor() {
+    this.prisma = new PrismaClient();
+  }
+
+  async execute(data: CreateStockDTO): Promise<any> {
+    const { name, category, quantity, barcode, description, status, imageUrl } =
+      data;
+
+    try {
+      const createdStock = await this.prisma.stock.create({
+        data: {
+          name,
+          category,
+          quantity,
+          barcode,
+          description,
+          status,
+          imageUrl,
+        },
+      });
+
+      return createdStock;
+    } catch (error) {
+      throw new Error(`Erro ao criar produto: ${error}`);
     }
-
-    // Cria o estoque no banco de dados usando o Prisma
-    const stock = await prismaClient.stock.create({
-      data: {
-        name,
-        category,
-        quantity,
-        barcode,
-        description,
-        status: status, // Define o status
-      },
-    });
-
-    return stock;
   }
 }
 

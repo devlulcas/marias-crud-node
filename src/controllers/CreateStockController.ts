@@ -1,50 +1,59 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { CreateStockService } from "../services/CreateStockService";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 class CreateStockController {
   async handle(request: FastifyRequest, reply: FastifyReply) {
     try {
-      // Extrai os dados da solicitação
-      const { name, category, quantity, barcode, description } =
+      const { name, category, quantity, barcode, description, imageUrl } =
         request.body as {
           name: string;
           category: string;
           quantity: number;
           barcode: string;
           description: string;
+          imageUrl: string;
         };
 
-      // Verifica se todos os campos obrigatórios estão presentes
-      if (!name || !category || quantity == null || !barcode || !description) {
-        // Se algum campo estiver ausente, retorna um erro de requisição inválida
-        reply.code(400).send({ message: "Todos os campos são obrigatórios." });
-        return;
+      if (!name || !category || quantity == null) {
+        return reply
+          .code(400)
+          .send({ message: "Todos os campos são obrigatórios." });
       }
 
-      // Define o status como inativo se a quantidade for 0 ou menor
-      const status = quantity <= 0 ? false : true;
+      // Verificar se todos os campos obrigatórios foram fornecidos
 
-      // Cria uma instância do serviço de criação
-      const stockService = new CreateStockService();
+      const status = quantity > 0;
 
-      // Executa o serviço para criar um novo estoque
-      const stock = await stockService.execute({
-        name,
-        category,
-        quantity,
-        barcode,
-        description,
-        status,
+      // Criar o produto com os dados fornecidos
+      const stock = await prisma.stock.create({
+        data: {
+          name,
+          category,
+          quantity,
+          barcode,
+          description,
+          status,
+          imageUrl,
+        },
       });
 
-      // Envia a resposta de volta com os dados do cadastro recém-criado
-      reply
-        .code(201)
-        .send({ message: "Produto criado com sucesso", data: stock });
+      const responseData = {
+        id: stock.id,
+        name: stock.name,
+        category: stock.category,
+        quantity: stock.quantity,
+        status: stock.status,
+      };
+
+      reply.code(201).send({
+        message: "Produto criado com sucesso",
+        data: responseData,
+      });
     } catch (error) {
-      // Se ocorrer um erro durante o processamento da solicitação, retorna um erro interno do servidor
       console.error("Erro ao criar Produto:", error);
-      reply.code(500).send({ message: "Erro interno do servidor." });
+      reply.code(500).send({ message: "Erro interno do servidor.", error });
     }
   }
 }
