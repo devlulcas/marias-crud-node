@@ -14,14 +14,18 @@ import { RegisterUserController } from "./controllers/RegisterUserController";
 import { logoutUser } from "./controllers/logoutController";
 import { getUsers } from "./controllers/UsersListController";
 import { deleteUserHandler } from "./controllers/DeleteUserController";
-import { authorize } from "./middleware/authorization";
 import {
   getProductCountHandler,
   getUserCountHandler,
 } from "./controllers/countHandlers";
 import { getProductCountByCategoryHandler } from "./controllers/getProductCountByCategoryHandler";
-import { CurrentStockReportController } from "./controllers/relatorios/CurrentStockReportController";
 import { ListStockController } from "./controllers/ListStockController";
+import { isAdmin, isAuthenticated } from "./middleware/auth";
+import { UpdateStockController } from "./controllers/updateStockController";
+import { getTotalSellingValueHandler } from "./controllers/CountValueController";
+import { countLowStockProducts } from "./controllers/CountStockLow";
+import { manageStock } from "./controllers/manageStock";
+import { CurrentStockReportController } from "./controllers/relatorios/CurrentStockReportController";
 
 // Função responsável por definir as rotas da aplicação
 export async function routes(fastify: FastifyInstance) {
@@ -59,25 +63,41 @@ export async function routes(fastify: FastifyInstance) {
   // Rota para deletar um usuário
   fastify.delete("/delete-users/:userId", deleteUserHandler);
 
-  // Rota para o administrador
-  fastify.get(
-    "/admin",
-    { preHandler: authorize("ADMIN") },
-    async (request, reply) => {
-      reply.send({
-        message: "Esta rota é acessível apenas para administradores",
-      });
-    }
-  );
+  // Exemplo de rota que requer autenticação
+  fastify.get('/protected-route', { preHandler: isAuthenticated }, async (request, reply) => {
+    reply.send({ message: 'Você está autenticado e tem acesso a esta rota.' });
+  });
 
-  // Rota para o usuário comum
-  fastify.get(
-    "/user",
-    { preHandler: authorize("USER") },
-    async (request, reply) => {
-      return { message: "Esta é uma rota privada do usuário" };
-    }
-  );
+  // Exemplo de rota que requer permissão de administrador
+  fastify.get('/admin-route', { preHandler: isAdmin }, async (request, reply) => {
+    reply.send({ message: 'Você é um administrador e tem acesso a esta rota.' });
+  });
+
+
+
+  /*  
+   // Rota para o administrador
+    fastify.get(
+      "/admin",
+      { preHandler: authorize("ADMIN") },
+      async (request, reply) => {
+        reply.send({
+          message: "Esta rota é acessível apenas para administradores",
+        });
+      }
+    );
+  
+    // Rota para o usuário comum
+    fastify.get(
+      "/user",
+      { preHandler: authorize("USER") },
+      async (request, reply) => {
+        return { message: "Esta é uma rota privada do usuário" };
+      }
+    ); 
+    */
+
+
 
   // Rota para logout
   fastify.post(
@@ -97,6 +117,16 @@ export async function routes(fastify: FastifyInstance) {
     }
   );
 
+
+  const updateStockController = new UpdateStockController();
+
+  // Rota para atualizar um produto de estoque
+  fastify.put<{ Params: { id: string } }>("/update-stock/:id", async (request, reply) => {
+    const { id } = request.params; // Extrair o parâmetro id da solicitação
+    await updateStockController.handle(request, reply); // Passar o id para o controlador
+  });
+
+
   // Rota para listar produtos
   fastify.get(
     "/list-stock",
@@ -110,6 +140,14 @@ export async function routes(fastify: FastifyInstance) {
   fastify.get("/users/count", getUserCountHandler);
 
   fastify.get("/products/count-by-category", getProductCountByCategoryHandler);
+
+  fastify.get('/total-selling-value', getTotalSellingValueHandler);
+
+  fastify.get('/stock/low-count', countLowStockProducts);
+
+
+  fastify.post('/manage-stock', manageStock);
+
 
   // Rota para excluir um produto
   fastify.delete(
