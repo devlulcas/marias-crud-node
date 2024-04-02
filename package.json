@@ -6,12 +6,17 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node src/server.ts",
-    "dev": "tsx watch src/server.ts"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "dev:vercel": "tsup --watch & vercel dev --listen 5005"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "fastify",
+    "typescript",
+    "tsup",
+    "vercel"
+  ],
+  "author": "Maria Clara Amorim",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
