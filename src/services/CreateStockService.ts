@@ -8,6 +8,8 @@ interface CreateStockDTO {
   description: string;
   status: boolean;
   imageUrl: string;
+  costPrice: number;
+  sellingPrice: number;
 }
 
 class CreateStockService {
@@ -18,7 +20,7 @@ class CreateStockService {
   }
 
   async execute(data: CreateStockDTO): Promise<any> {
-    const { name, category, quantity, barcode, description, status, imageUrl } =
+    const { name, category, quantity, barcode, description, status, imageUrl, costPrice, sellingPrice } =
       data;
 
     try {
@@ -31,6 +33,8 @@ class CreateStockService {
           description,
           status,
           imageUrl,
+          costPrice,
+          sellingPrice,
         },
       });
 
