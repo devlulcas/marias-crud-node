@@ -10,10 +10,14 @@ const generateToken = (user: User): string => {
   const payload = {
     id: user.id,
     username: user.username,
-    role: user.role
+    role: user.role,
   };
 
-  const token = jwt.sign(payload, 'chave_secreta', { expiresIn: '1h' }); 
+  if (!process.env.SECRET) {
+    throw new Error('Secret is not defined');
+  }
+
+  const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
 
   return token;
 };

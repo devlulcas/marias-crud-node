@@ -1,8 +1,8 @@
 // Importa as definições de tipos FastifyRequest e FastifyReply do módulo "fastify"
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 // Importa a classe DeleteStockService do arquivo de serviço correspondente
-import { DeleteStockService } from "../services/DeleteStockService";
+import { DeleteStockService } from '../services/DeleteStockService.js';
 
 // Classe responsável por lidar com as requisições para excluir um estoque
 class DeleteStockController {

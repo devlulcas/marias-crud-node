@@ -1,4 +1,4 @@
-import prismaClient from "../prisma";
+import prismaClient from '../prisma/index.js';
 
 // Interface que define a estrutura dos parâmetros necessários para excluir um Estoque
 interface DeleteStockProps {
@@ -11,7 +11,7 @@ class DeleteStockService {
   async execute({ id }: DeleteStockProps) {
     // Verifica se o ID do Estoque é válido
     if (!id) {
-      throw new Error("Solicitação inválida");
+      throw new Error('Solicitação inválida');
     }
 
     // Procura o Estoque com base no ID fornecido
@@ -23,7 +23,7 @@ class DeleteStockService {
 
     // Se o Estoque não for encontrado, lança um erro
     if (!foundStock) {
-      throw new Error("Estoque não encontrado");
+      throw new Error('Estoque não encontrado');
     }
 
     // Exclui o Estoque do banco de dados usando o Prisma
@@ -34,7 +34,7 @@ class DeleteStockService {
     });
 
     // Retorna uma mensagem indicando que a exclusão foi bem-sucedida
-    return { message: "Deletado com sucesso!" };
+    return { message: 'Deletado com sucesso!' };
   }
 }
 

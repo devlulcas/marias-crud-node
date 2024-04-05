@@ -1,5 +1,5 @@
 // Importa a classe PrismaClient do pacote @prisma/client
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 // Cria uma instância do cliente Prisma
 const prismaClient = new PrismaClient();

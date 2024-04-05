@@ -1,6 +1,6 @@
-import { Role } from "../models/User";
+import type { Role } from '../models/User.js';
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyRequest {
     user: {
       id: number;

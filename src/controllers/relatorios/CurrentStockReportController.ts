@@ -1,5 +1,5 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { CurrentStockReportService } from "../../services/relatorios/CurrentStockReportService";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { CurrentStockReportService } from '../../services/relatorios/CurrentStockReportService.js';
 
 class CurrentStockReportController {
   async handle(request: FastifyRequest, reply: FastifyReply) {
@@ -13,10 +13,10 @@ class CurrentStockReportController {
         report: report,
       });
     } catch (error) {
-      console.error("Erro ao gerar relatório de estoque atual:", error);
+      console.error('Erro ao gerar relatório de estoque atual:', error);
       reply.code(500).send({
         success: false,
-        message: "Erro interno do servidor ao gerar relatório.",
+        message: 'Erro interno do servidor ao gerar relatório.',
       });
     }
   }

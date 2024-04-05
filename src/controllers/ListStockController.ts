@@ -1,8 +1,8 @@
 // Importa as definições de tipos FastifyRequest e FastifyReply do módulo "fastify"
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 // Importa a classe ListStockService do arquivo de serviço correspondente
-import { ListStockService } from "../services/ListStockService";
+import { ListStockService } from '../services/ListStockService.js';
 
 // Classe responsável por lidar com as requisições para listar estoque
 class ListStockController {

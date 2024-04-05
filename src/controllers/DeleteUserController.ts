@@ -1,5 +1,5 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { deleteUser } from "../services/DeleteUserService";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { deleteUser } from '../services/DeleteUserService.js';
 
 // Interface para representar os parâmetros da solicitação
 interface DeleteUserParams {
