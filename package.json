@@ -7,8 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "postinstall": "prisma generate",
-    "build": "tsup",
+    "build": "prisma generate && tsup",
     "dev": "tsup --watch",
     "dev:vercel": "tsup --watch & vercel dev --listen 5005"
   },
